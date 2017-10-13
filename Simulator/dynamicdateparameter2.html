@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Set Date Filter to Last N Periods </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <!-- Use moment.js for accurate time adding -->
+        <script src='moment.js'></script>
+        <script type="text/javascript">
+            // Array of Sheet Names not to Check in the Dashboard
+            var sheets_to_skip = ['Username'];
+            
+            var viz;
+            var current_sheet;
+ 
+       /* 
+                The following two functions allow the page embedded in the dashboard to access the 
+                JS API object for the overall viz.
+                All credit to Tamas Foldi http://databoss.starschema.net/tableau-javascript-api-without-embedding/
+            
+            */
+			
+			function getTableau() {
+              return parent.parent.tableau;
+            };
+			
+			function getCurrentViz() {
+              return getTableau().VizManager.getVizs()[0];
+            };
+
+			window.onload=function() {
+				var vizDiv = document.getElementById('viz');
+				//var vizURL = "https://public.tableau.com/views/DynamicParameterExample/Overview?:embed=y&:display_count=yes&:showVizHome=no";
+				var options = {
+				onFirstInteractive: function() {
+					workbook = viz.getWorkbook();
+					workbook.changeParameterValueAsync('Custom Date', new Date()); //Finds the parameter named EndDT and changes the current value to today's date using new Date()
+					viz.refreshDataAsync(); //Refresh the data
+				//That's it! Now you have a dynamic EndDT parameter that always updates to the current date!
+			}
+	};
+viz = new tableauSoftware.Viz(vizDiv, vizURL, options);
+};
+
+</script>	
+
+</html>
